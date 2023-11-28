@@ -24,8 +24,10 @@ class PriorityQueue:
 
     def peek(self):
         if not self.is_empty():
-            self.queue.sort(key=lambda x: x.key, reverse=True)
-            return self.queue[0]
+            self.queue.sort(key=lambda x: x.details[1], reverse=True)
+            peeked_patient = self.queue[0]
+            self.queue.sort(key=lambda x: x.details[1])  # Reverse the sorting
+            return peeked_patient
         else:
             print("Queue is empty. Cannot peek.")
 
