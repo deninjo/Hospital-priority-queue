@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from priority_queue import Patient, PriorityQueue
 
+
 class HospitalGUI:
     def __init__(self, master):
         self.master = master
@@ -42,7 +43,7 @@ class HospitalGUI:
         self.remove_button = tk.Button(master, text="Remove Patient", command=self.remove_patient)
         self.remove_button.grid(row=2, column=6, padx=10, pady=10)
 
-        self.display_text = tk.Text(master, height=10, width=40)
+        self.display_text = tk.Text(master, height=15, width=40)
         self.display_text.grid(row=3, column=0, columnspan=7, padx=10, pady=10)
 
         self.update_display()
@@ -77,8 +78,12 @@ class HospitalGUI:
     def update_patient(self):
         name = self.name_entry.get()
         age = int(self.age_entry.get())
-        self.priority_queue.update(name, age)
-        self.update_display()
+        try:
+            self.priority_queue.update(name, age)
+            self.update_display()
+        except ValueError as e:
+            self.name_entry.focus_set()  # Set focus to the name entry
+            messagebox.showinfo("Error", str(e))
 
     def remove_patient(self):
         name = self.name_entry.get()
@@ -87,6 +92,7 @@ class HospitalGUI:
             self.priority_queue.remove(name, age)
             self.update_display()
         except ValueError:
+            self.name_entry.focus_set()  # Set focus to the name entry
             messagebox.showinfo("Error", "No such patient!")
 
     def update_display(self):

@@ -38,11 +38,17 @@ class PriorityQueue:
         return len(self.queue)
 
     def update(self, name, age):
-        # Remove the patient with the given name, if present
-        self.queue = [patient for patient in self.queue if patient.details[0] != name]
+        # Check if the patient is already in the queue
+        for patient in self.queue:
+            if patient.details[0] == name:
+                # Remove the patient from the queue
+                self.queue.remove(patient)
+                # Enqueue the updated patient with the new age
+                self.enqueue(Patient(name, age))
+                return
 
-        # Append the patient with the new details to the front of the stack
-        self.queue.insert(0, Patient(name, age))
+        # If the patient is not in the queue, raise a ValueError
+        raise ValueError("No such patient!")
 
     def remove(self, patient_name, patient_age):
         # Find the index of the patient with the given name and age
@@ -56,7 +62,7 @@ class PriorityQueue:
         if index_to_remove is not None:
             del self.queue[index_to_remove]
         else:
-            print("No such patient!")
+            raise ValueError("No such patient!")
 
     def __str__(self):
         return "[" + ", ".join(str(patient) for patient in self.queue) + "]"
